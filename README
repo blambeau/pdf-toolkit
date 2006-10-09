@@ -1,0 +1,4 @@
+If you have an archive other than a Ruby Gem, you can install with the usual
+"ruby setup.rb".  Use "rake rdoc" to generate documentation.
+
+PDF::Toolkit is relased under the MIT license.
