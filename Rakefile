@@ -64,6 +64,8 @@ spec = Gem::Specification.new do |s|
   s.require_path = 'lib'
   # s.autorequire = 'action_web_service'
 
+  s.add_dependency('activesupport')
+
   s.files = [ "Rakefile", "README", "setup.rb" ]
   s.files = s.files + Dir.glob( "lib/**/*.rb" )
   s.files = s.files + Dir.glob( "test/**/*" ).reject { |item| item.include?( "\.svn" ) }
@@ -89,13 +91,13 @@ task :pdoc => [:rdoc] do
   Rake::SshDirPublisher.new("tpope@tpope.us", "public_html/#{PKG_NAME}", "doc").upload
 end
 
-desc "Publish the release files to RubyForge."
-task :release => [ :package ] do
-  `rubyforge login`
+# desc "Publish the release files to RubyForge."
+# task :release => [ :package ] do
+  # `rubyforge login`
 
-  for ext in %w( gem tgz zip )
-    release_command = "rubyforge add_release #{PKG_NAME} #{PKG_NAME} 'REL #{PKG_VERSION}' pkg/#{PKG_NAME}-#{PKG_VERSION}.#{ext}"
-    puts release_command
-    system(release_command)
-  end
-end
+  # for ext in %w( gem tgz zip )
+    # release_command = "rubyforge add_release #{PKG_NAME} #{PKG_NAME} 'REL #{PKG_VERSION}' pkg/#{PKG_NAME}-#{PKG_VERSION}.#{ext}"
+    # puts release_command
+    # system(release_command)
+  # end
+# end
