@@ -26,7 +26,8 @@ require 'active_support'
 
 # Certain existing libraries have a PDF class; no sense in being unnecessarily
 # incompatible.
-(module PDF; end) unless defined? PDF
+module PDF #:nodoc:
+end unless defined? PDF
 
 # PDF::Toolkit can be used as a simple class, or derived from and tweaked.  The
 # following two examples have identical results.
@@ -54,7 +55,8 @@ require 'active_support'
 #
 # PDF::Toolkit requires +pdftk+, which is available from
 # http://www.accesspdf.com/pdftk.  For full functionality, also install
-# +xpdf+ from http://www.foolabs.com/xpdf.
+# +xpdf+ from http://www.foolabs.com/xpdf.  ActiveSupport (from Ruby on Rails)
+# is also required but this dependency may be removed in the future.
 #
 # == Limitations
 #
@@ -64,7 +66,7 @@ require 'active_support'
 # +pdftk+ requires the owner password, even for simply querying the document.
 class PDF::Toolkit
 
-  VERSION = "0.5"
+  VERSION = "0.49"
   extend Forwardable
   class Error < ::StandardError #:nodoc:
   end
@@ -193,22 +195,6 @@ class PDF::Toolkit
       end
     end
 
-=begin
-    def pdftk_attr(*syms)
-      syms.flatten.each do |sym|
-        # class_eval("@#{sym} = nil unless defined? @#{sym}",__FILE__,__LINE__)
-        define_method(sym)      { |*args| self.class.send(sym      ,@args) }
-        # define_method("#{sym}="){ |*args| self.class.send("#{sym}=",@args) }
-        (class <<self; self; end).instance_eval do
-          define_method(sym) { read_inheritable_attribute sym }
-          define_method("#{sym}=")   {|val| instance_variable_set "@#{sym}", val }
-          define_method("set_#{sym}"){|val| instance_variable_set "@#{sym}", val }
-          protected "set_#{sym}"
-        end
-      end
-    end
-=end
-
   end
 
   class_inheritable_accessor :executables, :default_permissions, :default_input_password
@@ -278,10 +264,12 @@ class PDF::Toolkit
     @new_filename || @filename
   end
 
-  # Retrieve the file's version.
+  # Retrieve the file's version as a symbol.
+  #
+  #   my_pdf.version # => :"1.4"
   def version
     @version ||= File.open(@filename) do |io|
-      io.readline.chomp[1..-1]
+      io.read(8)[5..-1].to_sym
     end
   end
 
@@ -294,7 +282,8 @@ class PDF::Toolkit
   end
 
   # Commit changes to the PDF.  The return value is a boolean reflecting the
-  # success of the operation.
+  # success of the operation (This should always be true unless you're
+  # utilizing #loot_active_record).
   def save
     create_or_update
   end

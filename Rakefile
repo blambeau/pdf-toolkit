@@ -8,7 +8,7 @@ require 'rake/rdoctask'
 require 'rake/packagetask'
 require 'rake/gempackagetask'
 require 'rake/contrib/sshpublisher'
-# require 'rake/contrib/rubyforgepublisher'
+require 'rake/contrib/rubyforgepublisher'
 require File.join(File.dirname(__FILE__), 'lib', 'pdf', 'toolkit')
 
 PKG_BUILD     = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
@@ -40,10 +40,7 @@ Rake::RDocTask.new { |rdoc|
   rdoc.rdoc_files.add('lib')
   rdoc.main     = "PDF::Toolkit"
   rdoc.title    = rdoc.main
-  # rdoc.options << '--line-numbers' << '--inline-source'
-  # rdoc.template = "#{ENV['template']}.rb" if ENV['template']
-  # rdoc.rdoc_files.include('CHANGELOG')
-  # rdoc.options << '-d' if `which dot` =~ /\/dot/
+  rdoc.options << '--inline-source'
 }
 
 
@@ -56,13 +53,13 @@ spec = Gem::Specification.new do |s|
   s.version = PKG_VERSION
 
   s.author = 'Tim Pope'
-  s.email = 'ruby@tpope.info'
+  s.email = 'ruby@tp0pe.inf0'.gsub(/0/,'o')
   s.rubyforge_project = RUBY_FORGE_PROJECT
+  s.homepage = "http://#{PKG_NAME}.rubyforge.org"
 
   s.has_rdoc = true
   # s.requirements << 'none'
   s.require_path = 'lib'
-  # s.autorequire = 'action_web_service'
 
   s.add_dependency('activesupport')
 
@@ -77,27 +74,20 @@ Rake::GemPackageTask.new(spec) do |p|
   p.need_zip = true
 end
 
-
-# Publish beta gem
-desc "Publish the gem"
-task :pgem => [:package] do 
-  Rake::SshFilePublisher.new("tpope@tpope.us", "public_html/gems", "pkg", "#{PKG_FILE_NAME}.gem").upload
-  # `ssh tpope@tpope.us './gemupdate.sh'`
-end
-
 # Publish documentation
 desc "Publish the API documentation"
-task :pdoc => [:rdoc] do 
-  Rake::SshDirPublisher.new("tpope@tpope.us", "public_html/#{PKG_NAME}", "doc").upload
+task :pdoc => [:rerdoc] do 
+  # Rake::RubyForgePublisher.new(RUBY_FORGE_PROJECT,RUBY_FORGE_USER).upload
+  Rake::SshDirPublisher.new("rubyforge.org", "/var/www/gforge-projects/#{PKG_NAME}", "doc").upload
 end
 
-# desc "Publish the release files to RubyForge."
-# task :release => [ :package ] do
-  # `rubyforge login`
+desc "Publish the release files to RubyForge."
+task :release => [ :package ] do
+  `rubyforge login`
 
-  # for ext in %w( gem tgz zip )
-    # release_command = "rubyforge add_release #{PKG_NAME} #{PKG_NAME} 'REL #{PKG_VERSION}' pkg/#{PKG_NAME}-#{PKG_VERSION}.#{ext}"
-    # puts release_command
-    # system(release_command)
-  # end
-# end
+  for ext in %w( gem tgz zip )
+    release_command = "rubyforge add_release #{PKG_NAME} #{PKG_NAME} 'REL #{PKG_VERSION}' pkg/#{PKG_NAME}-#{PKG_VERSION}.#{ext}"
+    puts release_command
+    system(release_command)
+  end
+end
