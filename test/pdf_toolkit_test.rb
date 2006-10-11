@@ -78,6 +78,12 @@ class PDFToolkitTest < Test::Unit::TestCase
     assert_equal "Jane Doe", saved.author
   end
 
+  def test_non_info
+    assert_equal :"1.4", @pdftk.version
+    assert_equal 1,      @pdftk.page_count
+    assert_match /<PDF::Toolkit/, @pdftk.to_s
+  end
+
   def test_date
     time = Time.at(1234567890)
     @pdftk.updated_at = time
@@ -132,6 +138,14 @@ class PDFToolkitTest < Test::Unit::TestCase
   def test_to_text
     text = @pdftk.to_text {|io|io.read}
     assert_match /^\f\n?$/, text
+  end
+
+  def test_enumerable
+    assert_equal 4, @pdftk.keys.size
+    @pdftk.merge!(:Author => "David", :Keywords => "chunky backon")
+    assert_equal 6, @pdftk.keys.size
+    @pdftk.delete_if {|k,v| k.to_s =~ /Date/}
+    assert_equal 4, @pdftk.keys.size
   end
 
 end

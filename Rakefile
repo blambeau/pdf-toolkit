@@ -91,3 +91,15 @@ task :release => [ :package ] do
     system(release_command)
   end
 end
+
+begin
+  require 'rcov/rcovtask'
+  Rcov::RcovTask.new do |t|
+    t.test_files = Dir['test/*_test.rb'] + Dir['test/test_*.rb']
+    t.verbose = true
+    t.rcov_opts << "--text-report"
+    # t.rcov_opts << "--exclude \\\\A/var/lib/gems"
+    t.rcov_opts << "--exclude '/(active_record|active_support)\\b'"
+  end
+rescue LoadError
+end

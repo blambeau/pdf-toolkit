@@ -43,10 +43,6 @@ class PDFToolkitActiveRecordTest < Test::Unit::TestCase
     return tempfile
   end
 
-  # def new_pdftool
-    # PDF::Toolkit.open(new_pdf.path)
-  # end
-
   def new_tempfile
     tempfile = Tempfile.open("pdftktest")
     tempfile.close
@@ -58,6 +54,7 @@ class PDFToolkitActiveRecordTest < Test::Unit::TestCase
     PDF::Toolkit.loot_active_record # Ensure a double loot is harmless
     assert_nil   @pdftk.author
     assert_equal false, @pdftk.valid?
+    assert_nil   @pdftk.save_as(new_tempfile)
   end
 
   def test_save

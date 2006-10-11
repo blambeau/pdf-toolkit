@@ -150,14 +150,14 @@ class PDF::Toolkit
         cattr_accessor :record_timestamps # nil by default
 
         meta.send(:define_method,:default_timezone) do
-          if defined? ActiveRecord::Base
-            ActiveRecord::Base.default_timezone
-          else
-            :local
-          end
+          defined? ActiveRecord::Base ?  ActiveRecord::Base.default_timezone : :local
         end
       end
       self
+    end
+
+    def human_attribute_name(arg) #:nodoc:
+      defined? ActiveRecord::Base ? ActiveRecord::Base.human_attribute_name(arg) : arg.gsub(/_/,' ')
     end
 
     private
@@ -179,7 +179,6 @@ class PDF::Toolkit
         command = (args.map {|arg| %{"#{arg.gsub('"','\\"')}"}}).join(" ")
         retval = IO.popen(command,options[:mode],&block)
         retval
-        # block_given? ? $?.success? : retval
       else
         system(*args)
       end
@@ -289,6 +288,8 @@ class PDF::Toolkit
   end
 
   # Like +save+, only raise an exception if the operation fails.
+  #
+  # TODO: ensure no ActiveRecord::RecordInvalid errors make it through.
   def save!
     if save
       self
@@ -311,6 +312,8 @@ class PDF::Toolkit
     @new_filename = filename
     save!
     self
+  rescue ActiveRecord::RecordInvalid
+    raise FileNotSaved
   end
 
   # Invoke +pdftotext+ on the file and return an +IO+ object for reading the
