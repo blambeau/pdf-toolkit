@@ -142,10 +142,13 @@ class PDFToolkitTest < Test::Unit::TestCase
 
   def test_enumerable
     assert_equal 4, @pdftk.keys.size
-    @pdftk.merge!(:Author => "David", :Keywords => "chunky backon")
+    @pdftk.merge!(:author => "David", 'Keywords' => "chunky backon")
     assert_equal 6, @pdftk.keys.size
     @pdftk.delete_if {|k,v| k.to_s =~ /Date/}
     assert_equal 4, @pdftk.keys.size
+    assert_equal true, @pdftk.has_key?(:Creator)
+    @pdftk.delete(:Creator)
+    assert_equal false, @pdftk.has_key?(:Creator)
   end
 
 end

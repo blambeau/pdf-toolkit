@@ -416,7 +416,10 @@ class PDF::Toolkit
   #
   # my_pdf.merge!("Author" => "Dave Thomas", :title => "Programming Ruby")
   def merge!(hash)
-    @new_info.merge!(hash)
+    hash.each do |k,v|
+      @new_info[lookup_key(k)] = v
+    end
+    self
   end
 
 # }}}1
