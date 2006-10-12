@@ -111,10 +111,10 @@ class PDFToolkitTest < Test::Unit::TestCase
     assert_not_nil pdftk.author
   end
 
-  # def test_autoloading
-    # pdftk = PDF::Toolkit.new(@pdftk)
-    # assert pdftk.has_key?(:creator), "Could not find creator"
-  # end
+  def test_autoloading
+    pdftk = PDF::Toolkit.new(@pdftk)
+    assert pdftk.has_key?(:creator), "Could not find creator"
+  end
 
   def test_inheritable_attributes
     old = PDF::Toolkit.default_permissions
@@ -142,13 +142,17 @@ class PDFToolkitTest < Test::Unit::TestCase
 
   def test_enumerable
     assert_equal 4, @pdftk.keys.size
-    @pdftk.merge!(:author => "David", 'Keywords' => "chunky backon")
+    @pdftk.merge!(:author => "Why", 'Keywords' => "chunky backon")
     assert_equal 6, @pdftk.keys.size
+    assert_equal true, @pdftk.has_key?('Author')
     @pdftk.delete_if {|k,v| k.to_s =~ /Date/}
     assert_equal 4, @pdftk.keys.size
     assert_equal true, @pdftk.has_key?(:Creator)
-    @pdftk.delete(:Creator)
+    @pdftk.delete(:creator)
     assert_equal false, @pdftk.has_key?(:Creator)
+    @pdftk.delete(:Author)
+    assert_equal false, @pdftk.has_key?('Author')
+    assert_equal 2, @pdftk.keys.size
   end
 
 end
