@@ -66,7 +66,7 @@ end unless defined? PDF
 # +pdftk+ requires the owner password, even for simply querying the document.
 class PDF::Toolkit
 
-  VERSION = "0.49"
+  PDF_TOOLKIT_VERSION = "0.5.0"
   extend Forwardable
   class Error < ::StandardError #:nodoc:
   end
@@ -134,9 +134,10 @@ class PDF::Toolkit
     # timestamping from +ActiveRecord+.  Use at your own risk.
     def loot_active_record
       require 'active_support'
-      require 'active_record/validations'
-      require 'active_record/callbacks'
-      require 'active_record/timestamp'
+      require 'active_record'
+      # require 'active_record/validations'
+      # require 'active_record/callbacks'
+      # require 'active_record/timestamp'
 
       unless defined? @@looted_active_record
         @@looted_active_record = true

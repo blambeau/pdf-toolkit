@@ -1,6 +1,7 @@
 require 'test/unit'
 require 'pdf/toolkit'
 require 'tempfile'
+# require 'active_record'
 # require 'active_record/validations'
 # require 'active_record/callbacks'
 # require 'active_record/timestamp'

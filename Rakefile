@@ -13,7 +13,7 @@ require File.join(File.dirname(__FILE__), 'lib', 'pdf', 'toolkit')
 
 PKG_BUILD     = ENV['PKG_BUILD'] ? '.' + ENV['PKG_BUILD'] : ''
 PKG_NAME      = 'pdf-toolkit'
-PKG_VERSION   = PDF::Toolkit::VERSION
+PKG_VERSION   = PDF::Toolkit::PDF_TOOLKIT_VERSION
 PKG_FILE_NAME   = "#{PKG_NAME}-#{PKG_VERSION}"
 # PKG_DESTINATION = ENV["PKG_DESTINATION"] || "../#{PKG_NAME}"
 
