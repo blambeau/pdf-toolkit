@@ -22,7 +22,7 @@
 require 'rubygems' rescue nil
 require 'tempfile'
 require 'forwardable'
-require 'active_support'
+require 'active_support/all'
 
 # Certain existing libraries have a PDF class; no sense in being unnecessarily
 # incompatible.

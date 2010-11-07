@@ -61,7 +61,7 @@ spec = Gem::Specification.new do |s|
   # s.requirements << 'none'
   s.require_path = 'lib'
 
-  s.add_dependency('activesupport')
+  s.add_dependency('activesupport', '>= 2.3.0')
 
   s.files = [ "Rakefile", "README", "setup.rb" ]
   s.files = s.files + Dir.glob( "lib/**/*.rb" )
