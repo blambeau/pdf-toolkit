@@ -194,8 +194,6 @@ class PDF::Toolkit
   end
 
   # Like +save+, only raise an exception if the operation fails.
-  #
-  # TODO: ensure no ActiveRecord::RecordInvalid errors make it through.
   def save!
     if save
       self
