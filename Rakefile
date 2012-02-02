@@ -6,7 +6,7 @@ task :default => [ :test ]
 # Run the unit tests
 require 'rake/testtask'
 Rake::TestTask.new { |t|
-  t.libs << "test"
+  t.libs << "lib" << "test"
   t.test_files = Dir['test/*_test.rb'] + Dir['test/test_*.rb']
   t.verbose = true
 }

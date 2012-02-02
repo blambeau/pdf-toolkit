@@ -62,7 +62,7 @@ class PDF::Toolkit
   # Raised when a .pdf file cannot be saved
   class FileNotSaved < Error; end
 
-  require File.expand_path('../toolkit/native', __FILE__)
+  require 'pdf/toolkit/native'
   extend Native
 
   class << self

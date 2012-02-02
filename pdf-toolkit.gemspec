@@ -1,5 +1,7 @@
-require File.expand_path("../lib/pdf/toolkit", __FILE__)
 require 'rubygems' rescue nil
+
+$:.unshift File.expand_path('../lib', __FILE__)
+require "pdf/toolkit"
 
 Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
