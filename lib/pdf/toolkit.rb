@@ -494,19 +494,8 @@ class PDF::Toolkit
   def create_or_update #:nodoc:
     run_callbacks_for(:before_save)
     result = new_record? ? create : update
-    if result
-      # run_callbacks_for(:after_save)
-    end
+    # run_callbacks_for(:after_save) if result
     result
-  end
-
-  def respond_to_without_attributes?(method)
-    respond_to?(method)
-  end
-
-  def destroy
-    raise NoMethodError, "stub method `destroy' called for #{self}:#{self.class}"
-    # File.unlink(@filename); self.freeze!
   end
 
   def cleanup
