@@ -1,13 +1,45 @@
 class PDF::Toolkit
   module ClassMethods
 
-    attr_accessor :default_permissions, 
-                  :default_input_password,
-                  :default_owner_password, 
-                  :default_user_password
+    def default_permissions
+      @default_permissions ||= (superclass.default_permissions rescue [])
+    end
+    attr_writer :default_permissions
 
-    protected     :default_owner_password=, 
-                  :default_user_password=
+    def default_input_password
+      @default_input_password ||= (superclass.default_input_password rescue nil)
+    end
+    attr_writer :default_input_password
+
+    def default_owner_password
+      @default_owner_password ||= (superclass.default_owner_password rescue nil)
+    end
+    attr_writer :default_owner_password
+    protected   :default_owner_password=
+
+    def default_user_password
+      @default_user_password ||= (superclass.default_user_password rescue nil)
+    end
+    attr_writer :default_user_password
+    protected   :default_user_password=
+
+    def info_accessors
+      @info_accessors ||= begin
+        if superclass.respond_to?(:info_accessors)
+          superclass.info_accessors.dup
+        else
+          Hash.new{|h,k|
+            if h.has_key?(k.to_s.to_sym)
+              h[k.to_s.to_sym]
+            elsif k.kind_of?(Symbol)
+              camelize_key(k)
+            else
+              k.dup
+            end
+          }
+        end
+      end
+    end
 
     # Add an accessor for a key.  If the key is omitted, defaults to a
     # camelized version of the accessor (+foo_bar+ becomes +FooBar+).  The
@@ -32,18 +64,6 @@ class PDF::Toolkit
       define_method "#{accessor_name}=" do |value|
         self[info_key] = value
       end
-    end
-
-    def info_accessors
-      @info_accessors ||= Hash.new{|h,k|
-        if h.has_key?(k.to_s.to_sym)
-          h[k.to_s.to_sym]
-        elsif k.kind_of?(Symbol)
-          camelize_key(k)
-        else
-          k.dup
-        end
-      }
     end
 
     def camelize_key(key)
