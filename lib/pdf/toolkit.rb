@@ -111,10 +111,6 @@ class PDF::Toolkit
         outfile||"-",:mode => (outfile ? nil : 'r'),&block)
     end
 
-    def human_attribute_name(arg) #:nodoc:
-      defined? ActiveRecord::Base ? ActiveRecord::Base.human_attribute_name(arg) : arg.gsub(/_/,' ')
-    end
-
     def info_accessors
       @info_accessors ||= Hash.new{|h,k|
         if h.has_key?(k.to_s.to_sym)
