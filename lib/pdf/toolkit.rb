@@ -216,8 +216,6 @@ class PDF::Toolkit
     @new_filename = filename
     save!
     self
-  rescue ActiveRecord::RecordInvalid
-    raise FileNotSaved
   end
 
   # Invoke +pdftotext+ on the file and return an +IO+ object for reading the
