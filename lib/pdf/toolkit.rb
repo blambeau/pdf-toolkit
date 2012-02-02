@@ -129,10 +129,6 @@ class PDF::Toolkit
 
     private
 
-    def instantiate(*args) #:nodoc:
-      raise NoMethodError, "stub method `instantiate' called for #{self}:#{self.class}"
-    end
-
     def call_program(*args,&block)
       old_stream = nil
       options = args.last.is_a?(Hash) ? args.pop : {}
