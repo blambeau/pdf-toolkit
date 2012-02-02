@@ -136,14 +136,16 @@ class PDF::Toolkit
 
   # Like +open+, only the attributes are lazily loaded.  Under most
   # circumstances,  +open+ is preferred.
-  def initialize(filename,input_password = nil)
+  def initialize(filename, input_password = nil)
     coercer = [:to_path, :to_str, :path].find{|meth| filename.respond_to? meth}
     @filename = coercer ? filename.send(coercer) : filename
+
     @input_password = input_password || default_input_password
     @owner_password = default_owner_password
     @user_password  = default_user_password
-    @permissions = default_permissions || []
-    @new_info = {}
+    @permissions    = default_permissions || []
+    @new_info       = {}
+
     run_callbacks_for(:after_initialize)
   end
 
