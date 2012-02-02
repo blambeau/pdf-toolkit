@@ -16,8 +16,6 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.require_path = 'lib'
 
-  s.add_dependency('activesupport', '>= 2.3.0')
-
   s.files = [ "Rakefile", "README", "pdf-toolkit.gemspec" ]
   s.files = s.files + Dir.glob( "lib/**/*.rb" )
   s.files = s.files + Dir.glob( "test/**/*" ).reject { |item| item.include?( "\.svn" ) }

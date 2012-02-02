@@ -20,7 +20,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 require 'tempfile'
 require 'forwardable'
-require 'active_support/all'
 
 # Certain existing libraries have a PDF class; no sense in being unnecessarily
 # incompatible.
@@ -101,7 +100,7 @@ class PDF::Toolkit
     #   MyDocument.open("document.pdf").created_at
     def info_accessor(accessor_name, info_key = nil)
       info_key ||= camelize_key(accessor_name)
-      read_inheritable_attribute(:info_accessors)[accessor_name] = info_key
+      info_accessors[accessor_name] = info_key
       define_method accessor_name do
         self[info_key]
       end
@@ -121,47 +120,36 @@ class PDF::Toolkit
       options = args.last.is_a?(Hash) ? args.pop : {}
       args << "dont_ask"
       args << options
-      result = call_program(executables[:pdftk],*args,&block)
+      result = call_program(:pdftk,*args,&block)
       return block_given? ? $?.success? : result
     end
 
     # Invoke +pdftotext+.  If +outfile+ is omitted, returns an +IO+ object for
     # the output.
     def pdftotext(file,outfile = nil,&block)
-      call_program(executables[:pdftotext],file,
+      call_program(:pdftotext,file,
         outfile||"-",:mode => (outfile ? nil : 'r'),&block)
-    end
-
-    # This method will +require+ and +include+ validations, callbacks, and
-    # timestamping from +ActiveRecord+.  Use at your own risk.
-    def loot_active_record
-      require 'active_support'
-      require 'active_record'
-      # require 'active_record/validations'
-      # require 'active_record/callbacks'
-      # require 'active_record/timestamp'
-
-      unless defined? @@looted_active_record
-        @@looted_active_record = true
-        meta = (class << self; self; end)
-        alias_method :initialize_ar_hack, :initialize
-        include ActiveRecord::Validations
-        include ActiveRecord::Callbacks
-        include ActiveRecord::Timestamp
-        alias_method :initialize, :initialize_ar_hack
-
-        cattr_accessor :record_timestamps # nil by default
-
-        meta.send(:define_method,:default_timezone) do
-          defined? ActiveRecord::Base ?  ActiveRecord::Base.default_timezone : :local
-        end
-      end
-      self
     end
 
     def human_attribute_name(arg) #:nodoc:
       defined? ActiveRecord::Base ? ActiveRecord::Base.human_attribute_name(arg) : arg.gsub(/_/,' ')
     end
+
+    def info_accessors
+      @info_accessors ||= Hash.new{|h,k|
+        if h.has_key?(k.to_s.to_sym)
+          h[k.to_s.to_sym]
+        elsif k.kind_of?(Symbol)
+          camelize_key(k)
+        else
+          k.dup
+        end
+      }
+    end
+
+    attr_accessor :default_permissions, :default_input_password
+    attr_accessor :default_owner_password, :default_user_password
+    protected :default_owner_password=, :default_user_password=
 
     private
 
@@ -179,7 +167,7 @@ class PDF::Toolkit
         STDERR.sync = true
       end
       if options[:mode]
-        command = (args.map {|arg| %{"#{arg.gsub('"','\\"')}"}}).join(" ")
+        command = (args.map{|arg| %{"#{arg.to_s.gsub('"','\\"')}"}}).join(" ")
         retval = IO.popen(command,options[:mode],&block)
         retval
       else
@@ -198,21 +186,6 @@ class PDF::Toolkit
     end
 
   end
-
-  class_inheritable_accessor :executables, :default_permissions, :default_input_password
-  class_inheritable_accessor :default_owner_password, :default_user_password
-  protected                  :default_owner_password=, :default_user_password=
-  # self.pdftk = "pdftk"
-  self.executables = Hash.new {|h,k| k.to_s.dup}
-  write_inheritable_attribute :info_accessors, Hash.new { |h,k|
-    if h.has_key?(k.to_s.to_sym)
-      h[k.to_s.to_sym]
-    elsif k.kind_of?(Symbol)
-      camelize_key(k)
-    else
-      k.dup
-    end
-  }
 
   info_accessor :created_at, "CreationDate"
   info_accessor :updated_at, "ModDate"
@@ -251,6 +224,11 @@ class PDF::Toolkit
     # reload
   end
 
+  def_delegators :"self.class", :default_input_password,
+                                :default_owner_password,
+                                :default_user_password,
+                                :default_permissions
+
   attr_reader :pdf_ids, :permissions
   attr_writer :owner_password, :user_password
 
@@ -258,7 +236,6 @@ class PDF::Toolkit
     read_data unless @pages
     @pages
   end
-
   alias pages page_count
 
   # Path to the file.
@@ -462,7 +439,7 @@ class PDF::Toolkit
   end
 
   def lookup_key(key)
-    return self.class.read_inheritable_attribute(:info_accessors)[key]
+    return self.class.info_accessors[key]
   end
 
   def call_pdftk_on_file(*args,&block)
