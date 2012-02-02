@@ -137,15 +137,8 @@ class PDF::Toolkit
   # Like +open+, only the attributes are lazily loaded.  Under most
   # circumstances,  +open+ is preferred.
   def initialize(filename,input_password = nil)
-    @filename = if filename.respond_to?(:to_str)
-                  filename.to_str
-                elsif filename.kind_of?(self.class)
-                  filename.instance_variable_get("@filename")
-                elsif filename.respond_to?(:path)
-                  filename.path
-                else
-                  filename
-                end
+    coercer = [:to_path, :to_str, :path].find{|meth| filename.respond_to? meth}
+    @filename = coercer ? filename.send(coercer) : filename
     @input_password = input_password || default_input_password
     @owner_password = default_owner_password
     @user_password  = default_user_password
@@ -173,6 +166,7 @@ class PDF::Toolkit
   def path
     @new_filename || @filename
   end
+  alias :to_path :path
 
   # Retrieve the file's version as a symbol.
   #
