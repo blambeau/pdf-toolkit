@@ -144,7 +144,7 @@ class PDF::Toolkit
     @user_password  = default_user_password
     @permissions = default_permissions || []
     @new_info = {}
-    callback(:after_initialize) if respond_to?(:after_initialize) && respond_to?(:callback)
+    run_callbacks_for(:after_initialize)
   end
 
   def_delegators :"self.class", :default_input_password,
