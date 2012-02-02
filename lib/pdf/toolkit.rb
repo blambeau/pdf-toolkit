@@ -81,7 +81,7 @@ class PDF::Toolkit
   class FileNotSaved < Error #:nodoc:
   end
 
-  class <<self
+  class << self
 
     # Add an accessor for a key.  If the key is omitted, defaults to a
     # camelized version of the accessor (+foo_bar+ becomes +FooBar+).  The
@@ -141,7 +141,7 @@ class PDF::Toolkit
 
       unless defined? @@looted_active_record
         @@looted_active_record = true
-        meta = (class <<self; self; end)
+        meta = (class << self; self; end)
         alias_method :initialize_ar_hack, :initialize
         include ActiveRecord::Validations
         include ActiveRecord::Callbacks
