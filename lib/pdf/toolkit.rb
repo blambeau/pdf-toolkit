@@ -67,9 +67,11 @@ class PDF::Toolkit
 
   VERSION = "0.5.0"
 
-  class Error < ::StandardError #:nodoc:
-  end
-  class ExecutionError < Error #:nodoc:
+  # Raised when something fails with the toolkit
+  class Error < ::StandardError; end
+
+  # Raised when an invocation of `pdftk` fails under the cover
+  class ExecutionError < Error
     attr_reader :command, :exit_status
     def initialize(msg = nil, cmd = nil, exit_status = nil)
       super(msg)
@@ -77,8 +79,9 @@ class PDF::Toolkit
       @exit_status = exit_status
     end
   end
-  class FileNotSaved < Error #:nodoc:
-  end
+
+  # Raised when a .pdf file cannot be saved
+  class FileNotSaved < Error; end
 
   class << self
 
