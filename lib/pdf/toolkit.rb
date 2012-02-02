@@ -63,9 +63,10 @@ end unless defined? PDF
 #
 # +pdftk+ requires the owner password, even for simply querying the document.
 class PDF::Toolkit
-
-  PDF_TOOLKIT_VERSION = "0.5.0"
   extend Forwardable
+
+  VERSION = "0.5.0"
+
   class Error < ::StandardError #:nodoc:
   end
   class ExecutionError < Error #:nodoc:

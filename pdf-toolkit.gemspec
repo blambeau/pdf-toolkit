@@ -6,7 +6,7 @@ Gem::Specification.new do |s|
   s.name = 'pdf-toolkit'
   s.summary = 'A wrapper around pdftk to allow PDF metadata manipulation'
   s.description = 'PDF::Toolkit provides a simple interface for querying and unpdation PDF metadata like the document Author and Title.'
-  s.version = PDF::Toolkit::PDF_TOOLKIT_VERSION
+  s.version = PDF::Toolkit::VERSION
 
   s.author = 'Tim Pope'
   s.email = 'ruby@tp0pe.inf0'.gsub(/0/,'o')
