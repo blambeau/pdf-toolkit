@@ -22,10 +22,9 @@ RDoc::Task.new { |rdoc|
 }
 
 # Create compressed packages
-require 'rake/packagetask'
-require 'rake/gempackagetask'
-spec = eval(File.read("pdf-toolkit.gemspec"))
-Rake::GemPackageTask.new(spec) do |p|
+require 'rubygems/package_task'
+spec = eval(File.read("pdf-toolkit.gemspec"), binding, "pdf-toolkit.gemspec")
+Gem::PackageTask.new(spec) do |p|
   p.gem_spec = spec
   p.need_tar = true
   p.need_zip = true
