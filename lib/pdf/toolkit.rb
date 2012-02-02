@@ -308,8 +308,6 @@ class PDF::Toolkit
     "#<#{self.class}:#{path}>"
   end
 
-# Enumerable/Hash methods {{{1
-
   # Create a hash from the file's metadata.
   def to_hash
     ensure_loaded
@@ -334,7 +332,6 @@ class PDF::Toolkit
     ensure_loaded
     @info[key.to_s]
   end
-
 
   # Write a metadata attribute.
   #
@@ -402,26 +399,7 @@ class PDF::Toolkit
     self
   end
 
-# }}}1
-
   protected
-
-=begin
-  def method_missing(method,*args)
-    args_needed = method.to_s.last == "=" ? 1 : 0
-    if args.length != args_needed
-      raise ArgumentError,
-      "wrong number of arguments (#{args.length} for #{args_needed})"
-    end
-    ensure_loaded
-    attribute = lookup_key(method.to_s.chomp("=").to_sym)
-    if method.to_s.last == "="
-      self[attribute] = args.first
-    else
-      self[attribute]
-    end
-  end
-=end
 
   def read_attribute(key)
     self[key]
