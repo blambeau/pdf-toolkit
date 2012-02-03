@@ -4,7 +4,7 @@ require 'tempfile'
 
 class MyPdfTool < PDF::Toolkit
   def before_save
-    self.updated_at = Time.at(1111111111)
+    self.updated_at = Time.at(1111111111).utc
   end
   self.default_permissions = %w(Printing ModifyAnnotations)
   self.info_accessor :a_subpdf_attribute
