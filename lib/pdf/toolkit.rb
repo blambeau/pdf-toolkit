@@ -81,7 +81,7 @@ class PDF::Toolkit
   def self.open(filename,input_password = nil)
     object = new(filename,input_password)
     object.reload
-    object
+    block_given? ? yield(object) : object
   end
 
   # Like +open+, only the attributes are lazily loaded.  Under most

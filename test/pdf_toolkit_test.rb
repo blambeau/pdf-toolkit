@@ -51,6 +51,15 @@ class PDFToolkitTest < Test::Unit::TestCase
     assert_nothing_raised { object.save!; object.reload }
   end
 
+  def test_open_yields_if_block_given
+    res = nil
+    res = PDF::Toolkit.open(new_pdf.path) do |pdf|
+      assert pdf.is_a?(PDF::Toolkit)
+      12
+    end
+    assert_equal 12, res
+  end
+
   def test_reload
     pdftk2 = PDF::Toolkit.open(@pdftk.path)
     pdftk2.keywords = "Ruby"
