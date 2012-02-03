@@ -5,7 +5,7 @@ class PDF::Toolkit
 
     def cast_field(field)
       case field
-      when /^D:(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)([-+].*)?$/
+      when /^D:(\d{4})(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)([-+].*)?/
         parse_time(field)
       when /^\d+$/
         field.to_i
@@ -28,7 +28,7 @@ class PDF::Toolkit
         end
         time
       else
-        string
+        raise ArgumentError, "Unable to coerce `#{string}` to a Date"
       end
     end
 
