@@ -7,6 +7,7 @@ class MyPdfTool < PDF::Toolkit
     self.updated_at = Time.at(1111111111)
   end
   self.default_permissions = %w(Printing ModifyAnnotations)
+  self.info_accessor :a_subpdf_attribute
 end
 
 class PDFToolkitTest < Test::Unit::TestCase
@@ -116,7 +117,7 @@ class PDFToolkitTest < Test::Unit::TestCase
     assert pdftk.has_key?(:creator), "Could not find creator"
   end
 
-  def test_inheritable_attributes
+  def test_inherited_class_attributes
     old = PDF::Toolkit.default_permissions
     PDF::Toolkit.default_permissions = ["AllFeatures"]
     new_class = Class.new(PDF::Toolkit)
@@ -127,6 +128,12 @@ class PDFToolkitTest < Test::Unit::TestCase
     assert_equal ["ModifyContents"], new_class.default_permissions
   ensure
     PDF::Toolkit.default_permissions = old
+  end
+
+  def test_inherited_info_accessors
+    top = PDF::Toolkit.info_accessors
+    bot = MyPdfTool.info_accessors
+    assert_equal [:a_subpdf_attribute], (bot.keys - top.keys)
   end
 
   def test_inheritance
