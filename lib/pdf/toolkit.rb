@@ -44,7 +44,7 @@ end unless defined? PDF
 class PDF::Toolkit
   extend Forwardable
 
-  VERSION = "0.5.0"
+  VERSION = "1.0.0.rc1"
 
   # Raised when something fails with the toolkit
   class Error < ::StandardError; end
