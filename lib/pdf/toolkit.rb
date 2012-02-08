@@ -32,8 +32,7 @@ end unless defined? PDF
 #
 # PDF::Toolkit requires +pdftk+, which is available from
 # http://www.accesspdf.com/pdftk.  For full functionality, also install
-# +xpdf+ from http://www.foolabs.com/xpdf.  ActiveSupport (from Ruby on Rails)
-# is also required but this dependency may be removed in the future.
+# +xpdf+ from http://www.foolabs.com/xpdf.
 #
 # == Limitations
 #

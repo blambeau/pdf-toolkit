@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
   s.require_path = 'lib'
 
-  s.files = [ "Rakefile", "README", "pdf-toolkit.gemspec" ]
+  s.files = [ "Rakefile", "README.md", "LICENCE.md", "pdf-toolkit.gemspec" ]
   s.files = s.files + Dir.glob( "lib/**/*.rb" )
   s.files = s.files + Dir.glob( "test/**/*" )
 end
