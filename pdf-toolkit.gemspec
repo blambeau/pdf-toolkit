@@ -10,8 +10,9 @@ Gem::Specification.new do |s|
   s.description = 'PDF::Toolkit provides a simple interface for querying and unpdation PDF metadata like the document Author and Title.'
   s.version = PDF::Toolkit::VERSION
 
-  s.author = 'Tim Pope'
-  s.email = 'ruby@tp0pe.inf0'.gsub(/0/,'o')
+  s.authors = ['Tim Pope', 'Bernard Lambeau']
+  s.email   = ['ruby@tp0pe.inf0'.gsub(/0/,'o'), "blambeau@gmail.com"]
+
   s.rubyforge_project = 'pdf-toolkit'
   s.homepage = "http://pdf-toolkit.rubyforge.org"
 
@@ -20,6 +21,6 @@ Gem::Specification.new do |s|
 
   s.files = [ "Rakefile", "README", "pdf-toolkit.gemspec" ]
   s.files = s.files + Dir.glob( "lib/**/*.rb" )
-  s.files = s.files + Dir.glob( "test/**/*" ).reject { |item| item.include?( "\.svn" ) }
+  s.files = s.files + Dir.glob( "test/**/*" )
 end
 
