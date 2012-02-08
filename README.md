@@ -20,6 +20,15 @@ A typical usecase is as follows:
     my_pdf.some_attribute = "Some value"
     my_pdf.save!
 
+## Note about this version
+
+This is a prerelease 1.0.0.rc1 version on an almost abandonned project. The main
+difference (broken API) with the 0.5.0 branch is that support for ActiveRecord 
+has been entirely removed (mostly because the implementation was ugly so far).
+If you use pdf-toolkit and would like activerecord to be included in 1.0.0, 
+please just tell us and we'll add it. If you upgrade from 0.5.0 to 1.0.0.rc1 and 
+something else goes wrong, please report the issue on github.
+
 ## Contributors
 
 * Tim Pope is the original author of pdf-toolkit
