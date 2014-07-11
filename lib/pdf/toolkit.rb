@@ -316,7 +316,7 @@ class PDF::Toolkit
       pipe.each_line do |line|
         
         # For PDFTK 2.0, ignore the begin line
-        next if line.ends_with?("Begin\n")
+        next if line =~ /Begin\n$/
         
         match = line.chomp.match(/(.*?): (.*)/)
         unless match
