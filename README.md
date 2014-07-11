@@ -22,7 +22,7 @@ A typical usecase is as follows:
 
 ## Note about this version
 
-Version 1.1.0 requires PDFTK version 2.0
+Starting with version 1.1.0, PDFTK version 2.0 is strongly recommended. Feel free to report problems on earlier versions if you think it's worth it, though.
 
 ## Contributors
 
