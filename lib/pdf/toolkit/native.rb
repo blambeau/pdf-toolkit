@@ -12,14 +12,14 @@ class PDF::Toolkit
       options = args.last.is_a?(Hash) ? args.pop : {}
       args << "dont_ask"
       args << options
-      result = call_program(:pdftk,*args,&block)
+      result = call_program("pdftk",*args,&block)
       return block_given? ? $?.success? : result
     end
 
     # Invoke +pdftotext+.  If +outfile+ is omitted, returns an +IO+ object for
     # the output.
     def pdftotext(file,outfile = nil,&block)
-      call_program(:pdftotext,file,
+      call_program("pdftotext",file,
         outfile||"-",:mode => (outfile ? nil : 'r'),&block)
     end
 

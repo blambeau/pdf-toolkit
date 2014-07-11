@@ -43,7 +43,7 @@ end unless defined? PDF
 class PDF::Toolkit
   extend Forwardable
 
-  VERSION = "1.0.0.rc1"
+  VERSION = "1.1.0"
 
   # Raised when something fails with the toolkit
   class Error < ::StandardError; end
@@ -314,6 +314,10 @@ class PDF::Toolkit
     end
     retval = call_pdftk_on_file("dump_data","output","-", :mode => "r") do |pipe|
       pipe.each_line do |line|
+        
+        # For PDFTK 2.0, ignore the begin line
+        next if line.ends_with?("Begin\n")
+        
         match = line.chomp.match(/(.*?): (.*)/)
         unless match
           raise ExecutionError, "Error parsing PDFTK output"
@@ -357,7 +361,8 @@ class PDF::Toolkit
     # ensure_loaded
     raise Error, "No data to update PDF with" unless @new_info
     tmp = ( out == @filename ? "#{out}.#{$$}.new" : nil)
-    args = ["update_info","-","output",tmp || out]
+    # # NEW FOR PDFTK 2.0, was just update_info
+    args = ["update_info_utf8","-","output",tmp || out]
     args += [ "owner_pw", @owner_password ] if @owner_password
     args += [ "user_pw" , @user_password  ] if @user_password
     args += (["allow"] + @permissions.uniq ) if @permissions && !@permissions.empty?
@@ -367,6 +372,7 @@ class PDF::Toolkit
     # metadata in order to modify the file.
     retval = call_pdftk_on_file(*args) do |io|
       (@info || {}).merge(@new_info).each do |key,value|
+        io.puts "InfoBegin" # NEW FOR PDFTK 2.0
         io.puts "InfoKey: #{key}"
         io.puts "InfoValue: #{format_field(value)}"
       end
