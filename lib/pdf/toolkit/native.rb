@@ -31,7 +31,7 @@ class PDF::Toolkit
       options[:mode] ||= 'r' if block_given?
       unless options[:silence_stderr] == false
         old_stream = STDERR.dup
-        STDERR.reopen(RUBY_PLATFORM =~ /mswin/ ? 'NUL:' : '/dev/null')
+        STDERR.reopen(RUBY_PLATFORM =~ /mswin|mingw/ ? 'NUL:' : '/dev/null')
         STDERR.sync = true
       end
       if options[:mode]
